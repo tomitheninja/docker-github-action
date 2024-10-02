@@ -15,11 +15,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./
         with:
-          args: |
-            set -ex
-            pwd
-            ls
-            ./entrypoint.sh script
+          args: /bin/bash << 'EOF'
+            echo "This is a multi-line bash script"
+            ./entrypoint.sh test
+            EOF
   build:
     runs-on: ubuntu-22.04
     steps:
