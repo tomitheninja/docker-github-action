@@ -28,15 +28,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: create-tag
-        run: echo "docker-image=ghcr.io/${{ github.repository }}:${{ github.sha }}" >> $GITHUB_OUTPUT
+        run: echo "docker-image=ghcr.io/${{ github.repository }}:benchmark" >> $GITHUB_OUTPUT
       - uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ steps.create-tag.outputs.docker-image }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache,mode=max
 
-  unittests:
+
+  unittests1:
     needs:
       - setup-runner
 
@@ -50,12 +51,14 @@ jobs:
       - run: |
           pwd
           ls
-          ./entrypoint.sh test
-  build:
+          pytest test/test.py
+  unittests2:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ./
+      - uses: actions/setup-node@v4
         with:
-          args: |
-            npm run build
+          node-version: 20
+      - run: |
+          pip install -r requirements.txt
+          pytest test/test.py
