@@ -1,11 +1,23 @@
-FROM alpine:3.20
+# pull official base image
+FROM python:3.10.1-alpine
 
-RUN apk add --no-cache bash nodejs npm
+# set work directory
+WORKDIR /src
 
-COPY package*.json ./
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-RUN npm install
+# copy requirements file
+COPY ./requirements.txt /src/requirements.txt
 
-# COPY entrypoint.sh /entrypoint.sh
+# install dependencies
+RUN set -eux \
+    && apk add --no-cache --virtual .build-deps build-base \
+    libressl-dev libffi-dev gcc musl-dev python3-dev \
+    postgresql-dev bash \
+    && pip install --upgrade pip setuptools wheel \
+    && pip install -r /src/requirements.txt \
+    && rm -rf /root/.cache/pip
 
 ENTRYPOINT ["/bin/bash"]
