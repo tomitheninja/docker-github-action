@@ -28,13 +28,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: create-tag
-        run: echo "docker-image=ghcr.io/${{ github.repository }}:${{ github.ref_name }}" >> $GITHUB_OUTPUT
+        run: echo "docker-image=ghcr.io/${{ github.repository }}:benchmark" >> $GITHUB_OUTPUT
       - uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ steps.create-tag.outputs.docker-image }}
           cache-from: type=registry,ref=${{ github.repository }}:buildcache
           cache-to: type=registry,ref=${{ github.repository }}:buildcache,mode=max
+
 
   unittests1:
     needs:
