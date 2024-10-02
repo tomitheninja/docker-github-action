@@ -16,6 +16,8 @@ jobs:
       - uses: ./
         with:
           args: |
+            pwd
+            ls
             npm run test
   build:
     runs-on: ubuntu-22.04
