@@ -8,4 +8,4 @@ RUN npm install
 
 # COPY entrypoint.sh /entrypoint.sh
 
-# ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash"]
