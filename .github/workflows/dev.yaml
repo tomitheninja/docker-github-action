@@ -28,9 +28,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - id: create-tag
-        run: echo "docker-image=${{ github.repository }}:${{ github.sha }}" >> $GITHUB_OUTPUT
+        run: echo "docker-image=ghcr.io/${{ github.repository }}:${{ github.sha }}" >> $GITHUB_OUTPUT
       - uses: docker/build-push-action@v6
         with:
+          registry: ghcr.io
           push: true
           tags: ${{ steps.create-tag.outputs.docker-image }}
           cache-from: type=gha
