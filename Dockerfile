@@ -5,3 +5,5 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
+
+ENTRYPOINT [ "/bin", "bash" ]
