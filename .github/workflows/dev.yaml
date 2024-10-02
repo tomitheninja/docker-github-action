@@ -9,16 +9,38 @@ on:
       - main
 
 jobs:
-  unittests:
+  setup-runner:
     runs-on: ubuntu-22.04
+    outputs:
+      docker-image: ${{ steps.create-tag.outputs.docker-image }}
+
     steps:
       - uses: actions/checkout@v4
-      - uses: ./
+      - uses: docker/setup-buildx-action@v3
+      - id: create-tag
+        run: echo "docker-image=${{ github.repository }}:${{ github.sha }}" >> $GITHUB_OUTPUT
+      - uses: docker/build-push-action@v6
         with:
-          args: /bin/bash << 'EOF'
-            echo "This is a multi-line bash script"
-            ./entrypoint.sh test
-            EOF
+          push: true
+          tags: ${{ steps.create-tag.outputs.docker-image }}
+          cache-from: type=gha
+          cache-to: type=gha
+
+  unittests:
+    needs:
+      - setup-runner
+
+    runs-on: ubuntu-22.04
+
+    container:
+      image: ${{ needs.setup-runner.outputs.docker-image }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          pwd
+          ls
+          ./entrypoint.sh test
   build:
     runs-on: ubuntu-22.04
     steps:
