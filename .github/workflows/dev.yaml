@@ -16,9 +16,10 @@ jobs:
       - uses: ./
         with:
           args: |
+            set -ex
             pwd
             ls
-            npm run test
+            ./entrypoint.sh script
   build:
     runs-on: ubuntu-22.04
     steps:
