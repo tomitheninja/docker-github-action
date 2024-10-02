@@ -36,7 +36,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  unittests:
+  unittests1:
     needs:
       - setup-runner
 
@@ -51,12 +51,13 @@ jobs:
           pwd
           ls
           ./entrypoint.sh test
-  build:
+  unittests2:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - uses: ./
+      - uses: actions/setup-node@v4
         with:
-          args: |
-            npm install
-            ./entrypoint.sh test
+          node-version: 20
+      - run: |
+          npm install
+          ./entrypoint.sh test
