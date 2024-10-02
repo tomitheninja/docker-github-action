@@ -1,0 +1,16 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  unittests:
+    uses: ./Dockerfile
+    with:
+      cmd: |
+        npm run test
