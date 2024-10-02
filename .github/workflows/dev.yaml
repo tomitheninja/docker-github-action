@@ -10,7 +10,18 @@ on:
 
 jobs:
   unittests:
-    uses: ./Dockerfile
-    with:
-      cmd: |
-        npm run test
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./Dockerfile
+        with:
+          args: |
+            npm run test
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./Dockerfile
+        with:
+          args: |
+            npm run build
