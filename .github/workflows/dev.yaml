@@ -58,4 +58,5 @@ jobs:
       - uses: ./
         with:
           args: |
-            npm run build
+            npm install
+            ./entrypoint.sh test
