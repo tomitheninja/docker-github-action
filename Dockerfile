@@ -6,4 +6,6 @@ COPY package*.json ./
 
 RUN npm install
 
-ENTRYPOINT "/bin/bash"
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
